@@ -1,7 +1,6 @@
 import lcm
 import sys
 import time
-from pyparticles import *
 from Sim import SimHandler
 from PyQt5.QtQuick import QQuickView
 from PyQt5.QtWidgets import QApplication
