@@ -1,3 +1,4 @@
+import os
 import lcm
 import sys
 import time
@@ -39,12 +40,7 @@ class MainPanel(QObject):
 
     @pyqtSlot()
     def startWork(self):
-        lc = lcm.LCM("udpm://239.255.76.67:7667?ttl=1")
-        msg = SimHandler()
-        msg.timestamp = int(time.time() * 1000000)
-        msg.parameters = str("highway")
-        msg.handler = 2
-        lc.publish("SIMULATOR", msg.encode())
+        os.popen("D:\zhou\Simulator_Unity_Build\\UnitySimulator181016\Simulator.exe geely")
 
     @pyqtSlot()
     def stopWork(self):
@@ -53,15 +49,13 @@ class MainPanel(QObject):
         msg.timestamp = int(time.time() * 1000000)
         msg.parameters = str("")
         msg.handler = -2
-        lc.publish("SIMULATOR", msg.encode())
+        lc.publish("SimulatorCtrl", msg.encode())
 
     @pyqtSlot()
     def dataRead(self):
         self.readExcelData()
 
     def up_data(self):
-        rootObject.setProperty("channelName", channelName)
-        rootObject.setProperty("timestamp", timestamp)
         rootObject.setProperty("handler", handler)
 
     def readExcelData(self):
@@ -96,7 +90,7 @@ class HandleWork(MainPanel):
         parameters = str(msg.parameters)
 
     lc = lcm.LCM()
-    subscription = lc.subscribe("SIMULATOR", my_handler)
+    subscription = lc.subscribe("SimulatorCtrl", my_handler)
 
 
 class WorkThread(QThread):
@@ -114,13 +108,13 @@ class WorkThread(QThread):
 
 
 if __name__ == "__main__":
-    # path = './content/MainControl.qml'
-    path = './content/particle.qml'
+    path = './content/MainControl.qml'
+    # path = './content/particle.qml'
     app = QGuiApplication(sys.argv)
     viewer = QQuickView()
     con = MainPanel()
     context = viewer.rootContext()
-    context.setContextProperty("con", con)
+    context.setContextProperty("con", con)  
     viewer.engine().quit.connect(app.quit)
     viewer.setResizeMode(QQuickView.SizeRootObjectToView)
     viewer.setSource(QUrl(path))

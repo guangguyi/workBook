@@ -6,12 +6,14 @@ Rectangle {
     id: mainControl
     width: 1440
     height: 960
-    color: "gray"
+    color: "white"
 
     property var dataOne
     property var dataTwo
     property var dataThree
     property var dataFour
+
+    property string handler
 
     Text {
         id: geelySimulator
@@ -27,53 +29,20 @@ Rectangle {
         y: 430
         width: 800
         height: 100
-        color: "blue"
-        opacity: 0
+        color: "white"
+        opacity: 1
         transform: Rotation { origin.x: 380; origin.y: 50; axis { x: 0; y: 1; z: 0 } angle: 180 }
     }
-
-    ParticleSystem { id: sys1 }
-    ImageParticle {
-        system: sys1
-        source: "qrc:/images/glowdot.png"
-        color: "blue"//"cyan"
-        alpha: 1
-        colorVariation: 0.1
-    }
-
-    Emitter {
-        id: trailsNormal
-        system: sys1
-        x: 330
-        y: 530
-        width: 800
-        height: 100
-
-        emitRate: 500
-        lifeSpan: 3000
-
-        velocity: PointDirection {xVariation: 4; yVariation: 4;}
-        acceleration: PointDirection {xVariation: 10; yVariation: 10;}
-        velocityFromMovement: 8
-
-        size: 9
-        sizeVariation: 4
-
-//        transform: Rotation { origin.x: 380; origin.y: 50; axis { x: 0; y: 1; z: 0 } angle: 180 }
-    }
-
     SequentialAnimation {
        running: true
-       PauseAnimation {duration: 2500}
+       PauseAnimation {duration: 1000}
        ParallelAnimation {
            NumberAnimation { target: maskGeely; property: "width"; to: 0; duration: 1000; easing.type: Easing.InOutQuad }
-//           NumberAnimation { target: trailsNormal; property: "width"; to: 0; duration: 1000; easing.type: Easing.InOutQuad }
        }
 
        ScriptAction {
            script: {
                geelySimulator.opacity = 0;
-//               trailsNormal.visible = false;
                mainControl.state = "mainMenu"
            }
        }
@@ -94,8 +63,9 @@ Rectangle {
             radius: 5
         }
         onClicked: {
-            con.startWork()
+            mainControl.handler = 1
             mainControl.state = "running"
+            con.startWork()
         }
     }
 
@@ -229,8 +199,11 @@ Rectangle {
                 radius: 1
             }
             onClicked: {
-                con.startWork()
-                mainControl.state = "running"
+                if (chooseSceItem.opacity !== 0){
+                    mainControl.handler = 1
+                    con.startWork()
+                    mainControl.state = "running"
+                }
             }
         }
     }
@@ -241,6 +214,29 @@ Rectangle {
         width: 1440
         height: 960
         opacity: 0
+
+        Timer {
+            id: timer
+            interval: 5000
+            running: runningSce.opacity === 1 ? true : false
+            repeat: true
+            onTriggered:
+                if (mainControl.handler === "-2" && mainControl.state === "running") {
+                    mainControl.state = "mainMenu"
+                }
+        }
+
+        Text {
+            id: testwqw
+            text: mainControl.handler
+            font.pixelSize: 20
+            color: "dodgerblue"
+            anchors.right: mainControl.right
+            anchors.rightMargin: 100
+            anchors.topMargin: 100
+            anchors.top: mainControl.top
+        }
+
 
         Text {
             id: workTxt
