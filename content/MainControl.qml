@@ -227,18 +227,6 @@ Rectangle {
         }
 
         Text {
-            id: testwqw
-            text: mainControl.handler
-            font.pixelSize: 20
-            color: "dodgerblue"
-            anchors.right: mainControl.right
-            anchors.rightMargin: 100
-            anchors.topMargin: 100
-            anchors.top: mainControl.top
-        }
-
-
-        Text {
             id: workTxt
             anchors.horizontalCenter: parent.horizontalCenter
             y: 200

@@ -2,9 +2,9 @@ import os
 import lcm
 import sys
 import time
+import subprocess
 from Sim import SimHandler
 from PyQt5.QtQuick import QQuickView
-from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QGuiApplication
 from PyQt5.QtCore import QUrl, QObject, pyqtSignal, QTimer, QThread, pyqtSlot
 import openpyxl
@@ -40,7 +40,7 @@ class MainPanel(QObject):
 
     @pyqtSlot()
     def startWork(self):
-        os.popen("D:\zhou\Simulator_Unity_Build\\UnitySimulator181016\Simulator.exe geely")
+        subprocess.Popen('.\simulator\Simulator.exe geely', shell=True)
 
     @pyqtSlot()
     def stopWork(self):
@@ -109,7 +109,6 @@ class WorkThread(QThread):
 
 if __name__ == "__main__":
     path = './content/MainControl.qml'
-    # path = './content/particle.qml'
     app = QGuiApplication(sys.argv)
     viewer = QQuickView()
     con = MainPanel()
