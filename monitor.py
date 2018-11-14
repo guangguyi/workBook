@@ -10,7 +10,7 @@ from PyQt5.QtCore import QUrl, QObject, pyqtSignal, QTimer, QThread, pyqtSlot
 import openpyxl
 
 
-wb = openpyxl.load_workbook('./files/scenario.xlsx')
+wb = openpyxl.load_workbook(os.getcwd()+'\\files\scenario.xlsx')
 ws = wb.worksheets[0]
 rows = ws.max_row + 1
 dataOne = []
@@ -38,9 +38,14 @@ class MainPanel(QObject):
     def start(self):
         self.work.start()
 
-    @pyqtSlot()
-    def startWork(self):
-        subprocess.Popen('.\simulator\Simulator.exe geely', shell=True)
+    @pyqtSlot(int)
+    def startWork(self, value):
+        if value == 1:
+            para = 'geely'
+        else:
+            para = 'highway'
+        dirPara = os.path.join(os.getcwd()+'\simulator\Simulator.exe'+' '+para)
+        subprocess.Popen(dirPara)
 
     @pyqtSlot()
     def stopWork(self):
@@ -108,7 +113,6 @@ class WorkThread(QThread):
 
 
 if __name__ == "__main__":
-    path = './content/MainControl.qml'
     app = QGuiApplication(sys.argv)
     viewer = QQuickView()
     con = MainPanel()
@@ -116,7 +120,7 @@ if __name__ == "__main__":
     context.setContextProperty("con", con)  
     viewer.engine().quit.connect(app.quit)
     viewer.setResizeMode(QQuickView.SizeRootObjectToView)
-    viewer.setSource(QUrl(path))
+    viewer.setSource(QUrl.fromLocalFile(os.getcwd()+"\content\MainControl.qml"))
     rootObject = viewer.rootObject()
     viewer.show()
     app.exec_()

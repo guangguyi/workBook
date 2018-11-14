@@ -14,6 +14,7 @@ Rectangle {
     property var dataFour
 
     property string handler
+    property string tmpdir
 
     Text {
         id: geelySimulator
@@ -35,7 +36,7 @@ Rectangle {
     }
     SequentialAnimation {
        running: true
-       PauseAnimation {duration: 1000}
+       PauseAnimation {duration: 500}
        ParallelAnimation {
            NumberAnimation { target: maskGeely; property: "width"; to: 0; duration: 1000; easing.type: Easing.InOutQuad }
        }
@@ -65,7 +66,7 @@ Rectangle {
         onClicked: {
             mainControl.handler = 1
             mainControl.state = "running"
-            con.startWork()
+            con.startWork(1)
         }
     }
 
@@ -117,10 +118,20 @@ Rectangle {
                 anchors.top: title.bottom
                 anchors.topMargin: 30
                 anchors.left: backRec.left
-                text: "NO.1"
+                text: " "
                 checked: true
+                Text {
+                    opacity: buttonOne.opacity
+                    anchors.top: buttonOne.top
+                    anchors.topMargin: 33
+                    anchors.right: buttonOne.right
+                    anchors.rightMargin: 120
+                    font.pixelSize: 30
+                    text: qsTr("吉利园区")
+                }
 
                 background: Rectangle {
+                    id: monitor
                     color: buttonOne.checked ? "dodgerblue" : "white"
                     implicitHeight: 100
                     implicitWidth: 300
@@ -129,11 +140,22 @@ Rectangle {
                     radius: 2
                 }
             }
+
             RadioButton {
                 id: buttonTwo
                 anchors.top: buttonOne.bottom
                 anchors.left: backRec.left
-                text: "NO.2"
+                text: " "
+
+                Text {
+                    opacity: buttonTwo.opacity
+                    anchors.top: buttonTwo.top
+                    anchors.topMargin: 33
+                    anchors.right: buttonTwo.right
+                    anchors.rightMargin: 120
+                    font.pixelSize: 30
+                    text: qsTr("高速公路")
+                }
 
                 background: Rectangle {
                     color:  buttonTwo.checked ? "dodgerblue" : "white"
@@ -144,44 +166,14 @@ Rectangle {
                     radius: 2
                 }
             }
-            RadioButton {
-                id: buttonThree
-                anchors.top: buttonTwo.bottom
-                anchors.left: backRec.left
-                text: "NO.3"
-
-                background: Rectangle {
-                    color:  buttonThree.checked ? "dodgerblue" : "white"
-                    implicitHeight: 100
-                    implicitWidth: 300
-                    border.color: buttonThree.down ? "blue" : "lightgray"
-                    border.width: 1
-                    radius: 2
-                }
-            }
-            RadioButton {
-                id: buttonFour
-                anchors.top: buttonThree.bottom
-                anchors.left: backRec.left
-                text: "NO.4"
-
-                background: Rectangle {
-                    color:  buttonFour.checked ? "dodgerblue" : "white"
-                    implicitHeight: 100
-                    implicitWidth: 300
-                    border.color: buttonFour.down ? "blue" : "lightgray"
-                    border.width: 1
-                    radius: 2
-                }
-            }
         }
 
-        Text {
-            id: test
-            anchors.centerIn: parent
-            font.pixelSize: 55
-            text: (mainControl.dataOne[0])
-        }
+//        Text {
+//            id: test
+//            anchors.centerIn: parent
+//            font.pixelSize: 55
+//            text: (mainControl.dataOne[0])
+//        }
 
         Button {
             id: temp
@@ -201,9 +193,62 @@ Rectangle {
             onClicked: {
                 if (chooseSceItem.opacity !== 0){
                     mainControl.handler = 1
-                    con.startWork()
+                    if (buttonOne.checked === true) {
+                        con.startWork(1)
+                    } else {
+                        con.startWork(2)
+                    }
+
                     mainControl.state = "running"
                 }
+            }
+        }
+        Item {
+            id: geelySce
+            opacity: chooseSceItem.opacity
+
+            Image {
+                id: scenenpng
+                scale: 0.7
+                x: 230
+                y: -60
+                opacity: 1
+                z: 10
+                source: buttonOne.checked ? "../images/geely.png" :
+                                            "../images/highway.png"
+            }
+            Text {
+                id: sceneText
+                anchors.top: scenenpng.bottom
+                anchors.topMargin: -60
+                x: 383
+                font.pixelSize: 40
+                color: "dodgerblue"
+                text: mainControl.tmpdir//qsTr("场景信息:")
+            }
+            Text {
+                id: scnenName
+                anchors.top: sceneText.bottom
+                anchors.topMargin: 50
+                anchors.left: sceneText.left
+                font.pixelSize: 30
+                text: buttonOne.checked ? qsTr("场景名：吉利园区") : qsTr("场景名：高速公路")
+            }
+            Text {
+                id: scnenInfo
+                anchors.top: scnenName.bottom
+                anchors.topMargin: 30
+                anchors.left: sceneText.left
+                font.pixelSize: 30
+                text: buttonOne.checked ? qsTr("场景简介：吉利杭州湾研究院场景仿真") : qsTr("场景简介：高速公路场景仿真")
+            }
+            Text {
+                id: scnenInclude
+                anchors.top: scnenInfo.bottom
+                anchors.topMargin: 30
+                anchors.left: sceneText.left
+                font.pixelSize: 30
+                text: buttonOne.checked ? qsTr("场景内容：车辆、行人") : qsTr("场景内容：车辆")
             }
         }
     }
