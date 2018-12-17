@@ -7,7 +7,7 @@ Item {
     width: 1280
     height: 720
 
-    property int valueHor: horslider.value*100
+    property in: horslider.value*100
     property int valueVerADD: versliderAdd.value*100
     property string channelName
     property string timestamp
