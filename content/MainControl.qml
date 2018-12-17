@@ -14,7 +14,6 @@ Rectangle {
     property var dataFour
 
     property string handler
-    property string tmpdir
 
     Text {
         id: geelySimulator
@@ -224,7 +223,7 @@ Rectangle {
                 x: 383
                 font.pixelSize: 40
                 color: "dodgerblue"
-                text: mainControl.tmpdir//qsTr("场景信息:")
+                text: qsTr("场景信息:")
             }
             Text {
                 id: scnenName

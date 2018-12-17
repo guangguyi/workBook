@@ -47,6 +47,7 @@ class MainPanel(QObject):
         dirPara = os.path.join(os.getcwd()+'\simulator\Simulator.exe'+' '+para)
         subprocess.Popen(dirPara)
 
+
     @pyqtSlot()
     def stopWork(self):
         lc = lcm.LCM("udpm://239.255.76.67:7667?ttl=1")
@@ -113,6 +114,7 @@ class WorkThread(QThread):
 
 
 if __name__ == "__main__":
+    path = os.getcwd()+"\content\MainControl.qml"
     app = QGuiApplication(sys.argv)
     viewer = QQuickView()
     con = MainPanel()
@@ -120,7 +122,8 @@ if __name__ == "__main__":
     context.setContextProperty("con", con)  
     viewer.engine().quit.connect(app.quit)
     viewer.setResizeMode(QQuickView.SizeRootObjectToView)
-    viewer.setSource(QUrl.fromLocalFile(os.getcwd()+"\content\MainControl.qml"))
+    viewer.setSource(QUrl.fromLocalFile(path))
     rootObject = viewer.rootObject()
+    subprocess.Popen("python server.py")
     viewer.show()
     app.exec_()
